@@ -19,7 +19,12 @@ trait IsResponse
 {
     private(set) Status $status = Status::OK;
 
-    private(set) View|string|array|Generator|JsonSerializable|null $body = null;
+    private View|string|array|Generator|JsonSerializable|null $bodyValue = null;
+
+    private(set) View|string|array|Generator|JsonSerializable|null $body {
+        get => $this->getBody();
+        set => $this->bodyValue = $value;
+    }
 
     /** @var \Tempest\Http\Header[] */
     private(set) array $headers = [];
@@ -121,6 +126,11 @@ trait IsResponse
         $this->status = $status;
 
         return $this;
+    }
+
+    protected function getBody(): View|string|array|Generator|JsonSerializable|null
+    {
+        return $this->bodyValue;
     }
 
     public function setBody(View|string|array|Generator|null $body): self
